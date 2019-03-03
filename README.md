@@ -1,0 +1,1 @@
+# OSU-Mania-Star-Rating
