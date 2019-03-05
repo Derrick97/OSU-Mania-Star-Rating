@@ -1,5 +1,6 @@
 import numpy as np;
 import osu_file_parser as osu_parser
+import sys;
 
 def parse_osu_file(file_path):
     p = osu_parser.parser(file_path)
@@ -16,3 +17,8 @@ def calculate_Y():
 
 def calculate_Z():
     pass
+
+length_of_arguments = len(sys.argv)
+file_path = ""
+if length_of_arguments != 0:
+    file_path = sys.argv[1]
