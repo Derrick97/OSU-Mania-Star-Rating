@@ -1,19 +1,22 @@
-import numpy as np;
+import numpy as np
 
-#...Why does python 3.x change next to __next__......
+# ...Why does python 3.x change next to __next__......
 
 
 def string_to_int(str):
     return int(float(str))
 
+
 def collect_data(data, new_datum):
     data = data.append(new_datum)
 
 # Parser Class that can be used on other class.
+
+
 class parser():
     def __init__(self, file_path):
         # Need to find some way to escape \.
-        #self.file_path = file_path.replace("\\", "\\\\")
+        # self.file_path = file_path.replace("\\", "\\\\")
         self.file_path = file_path
         self.column_count = -1
         self.columns = []
@@ -22,15 +25,15 @@ class parser():
         self.note_types = []
 
     def process(self):
-        with open(self.file_path, "r+", encoding = 'utf-8') as f:
+        with open(self.file_path, "r+", encoding='utf-8') as f:
             try:
                 for line in f:
-                   self.read_metadata(f, line)
-                   temp = self.read_column_count(f, line)
-                   if temp != -1:
-                       self.column_count = temp
-                   if self.column_count != -1:
-                       self.read_note(f, line, self.column_count)
+                    self.read_metadata(f, line)
+                    temp = self.read_column_count(f, line)
+                    if temp != -1:
+                        self.column_count = temp
+                    if self.column_count != -1:
+                        self.read_note(f, line, self.column_count)
 
             except StopIteration:
                 # Test for note data.
@@ -42,7 +45,7 @@ class parser():
     def read_metadata(self, f, line):
         if "[Metadata]" in line:
             while "[Difficulty]" not in line:
-                print(line, end = "")
+                print(line, end="")
                 line = f.__next__()
 
     # Read mode: key count.
@@ -65,9 +68,9 @@ class parser():
             meter = string_to_int(params[2])
             # Other parameters are not important for measuring difficulty.
 
-
     # Main function for parsing note data.
     # https://osu.ppy.sh/help/wiki/osu!_File_Formats/Osu_(file_format)
+
     def read_note(self, f, line, column_count):
         if "[HitObjects]" in line:
             line = f.__next__()
@@ -81,7 +84,7 @@ class parser():
     def parse_hit_object(self, f, object_line, column_count):
         params = object_line.split(",")
         column = string_to_int((params[0]))
-        column_width = int(512/column_count)
+        column_width = int(512 / column_count)
         column = int(column / column_width)
         collect_data(self.columns, column)
 
@@ -96,3 +99,10 @@ class parser():
         last_param_chunk = params[5].split(":")
         note_end = int(last_param_chunk[0])
         collect_data(self.note_ends, note_end)
+
+    def get_parsed_data(self):
+        return [self.column_count,
+                self.columns,
+                self.note_starts,
+                self.note_ends,
+                self.note_types]
