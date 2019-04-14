@@ -22,4 +22,4 @@ eg.:
  ```bash
 python algorithm.py "C:\Users\oscar\AppData\Local\osu!\Songs\581729 jioyi - cyanine\jioyi - cyanine (Rivals_7) [Ultimate].osu"
 ```
-5. The terminal will display the metadata, and all the hitting objects are already parsed and stored inside datat structures. 
+3. The terminal will display the metadata, and all the hitting objects are already parsed and stored inside datat structures. 
