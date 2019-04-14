@@ -6,7 +6,6 @@ import numpy as np;
 def string_to_int(str):
     return int(float(str))
 
-
 def collect_data(data, new_datum):
     data = data.append(new_datum)
 
@@ -35,8 +34,8 @@ class parser():
 
             except StopIteration:
                 # Test for note data.
-                print(self.columns[:20])
-                print(self.note_starts[:20])
+                # print(self.columns[:20])
+                # print(self.note_starts[:20])
                 pass
 
     # Read metadata from .osu file.
