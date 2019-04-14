@@ -14,17 +14,12 @@ All code are based on python 3.6.8. Make sure you have at least python 3.4 insta
 
 For Windows Users:
 1. ctrl + r, type "cmd", open the terminal.
-2. cd into the directory, type "python" in terminal
-3. type this command into the terminal, and press enter.
+2. cd into the directory, type this command into the terminal, replace 'filename' with the path of the .osu file, and press enter.
  ```bash
-import algorithm
-```
-4. type this command into the terminal, replace 'filename' with the path of the .osu file, and press enter.
- ```bash
-algorithm.parse_osu_file(r'filename')
+python algorithm.py ('filename')
 ```
 eg.:
  ```bash
-algorithm.parse_osu_file(r"C:\Users\oscar\AppData\Local\osu!\Songs\636118 Noah - Immortal saga\Noah - Immortal saga (Imperial Wolf) [4K MXM].osu")
+python algorithm.py "C:\Users\oscar\AppData\Local\osu!\Songs\581729 jioyi - cyanine\jioyi - cyanine (Rivals_7) [Ultimate].osu"
 ```
-5. The terminal will display the metadata.
+5. The terminal will display the metadata, and all the hitting objects are already parsed and stored inside datat structures. 
