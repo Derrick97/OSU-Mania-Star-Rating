@@ -18,6 +18,7 @@ class parser():
         # Need to find some way to escape \.
         # self.file_path = file_path.replace("\\", "\\\\")
         self.file_path = file_path
+        self.od = -1
         self.column_count = -1
         self.columns = []
         self.note_starts = []
@@ -29,16 +30,21 @@ class parser():
             try:
                 for line in f:
                     self.read_metadata(f, line)
-                    temp = self.read_column_count(f, line)
-                    if temp != -1:
-                        self.column_count = temp
+
+                    temp_cc = self.read_column_count(f, line)
+                    if temp_cc != -1:
+                       self.column_count = temp_cc
+
+                    temp_od = self.read_overall_difficulty(f, line)
+                    if temp_od != -1:
+                       self.od = temp_od
+
                     if self.column_count != -1:
-                        self.read_note(f, line, self.column_count)
+                       self.read_note(f, line, self.column_count)
 
             except StopIteration:
                 # Test for note data.
-                # print(self.columns[:20])
-                # print(self.note_starts[:20])
+                print(self.od)
                 pass
 
     # Read metadata from .osu file.
@@ -48,13 +54,26 @@ class parser():
                 print(line, end="")
                 line = f.__next__()
 
+    def read_overall_difficulty(self, f, line):
+        od = -1
+        if "OverallDifficulty:" in line:
+            temp = line.strip()
+            pos_of_point = temp.index(':')
+            if (pos_of_point == None):
+                od = float(temp[-1])
+            else:
+                od = float(temp[pos_of_point+1:])
+            # line = f.__next__()
+        return float(od)
+
     # Read mode: key count.
     def read_column_count(self, f, line):
         column_count = -1
         if "CircleSize:" in line:
             temp = line.strip()
             column_count = temp[-1]
-            line = f.__next__()
+            # line = f.__next__()
+            print(line)
         return string_to_int(column_count)
 
     def read_Timing_Points(self, f, line):
