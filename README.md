@@ -16,7 +16,7 @@ For Windows Users:
 1. ctrl + r, type "cmd", open the terminal.
 2. cd into the directory, type this command into the terminal, replace 'filename' with the path of the .osu file, and press enter.
  ```bash
-python algorithm.py ('filename')
+python main.py ('filename')
 ```
 eg.:
  ```bash
