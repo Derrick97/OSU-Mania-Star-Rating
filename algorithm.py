@@ -41,8 +41,8 @@ class star_calculator():
         self.note_ends = p[3]
         self.note_types = p[4]
         self.od = p[5]
-        print(self.columns)
-        print(self.asperity())
+        # print(self.columns)
+        # print(len(self.calculate_asperity()))
 
     def calculate_X(self):
         pass
@@ -61,9 +61,9 @@ class star_calculator():
         return vs
 
     # Calculate asperity. The asperity is count inside every [-0.5s, +0.5s] window.
-    # Return: array of asperities, whose length = 2 * song length - 1.
-    def asperity(self):
-        time_interval_start = 500
+    # Step = 10ms here.
+    def calculate_asperity(self):
+        time_interval_start = 0
         left_half_columns = right_half_columns = -1
         start_evaluating_note_index = 0
         if (self.column_count % 2 == 0):
@@ -73,7 +73,7 @@ class star_calculator():
                 local_asperity = self.asperity_in_window(left_half_columns, right_half_columns, time_interval_start, start_evaluating_note_index)
                 asperities.append(local_asperity[0])
                 start_evaluating_note_index = local_asperity[1]
-                time_interval_start += 1000
+                time_interval_start += 10
             return asperities
         else:
             asperities_1 = asperities_2 = []
@@ -85,7 +85,7 @@ class star_calculator():
                 local_asperity = self.asperity_in_window(right_half_columns, left_half_columns, time_interval_start, start_evaluating_note_index)
                 asperities_2.append(local_asperity[0])
                 start_evaluating_note_index = local_asperity[1]
-                time_interval_start += 1000
+                time_interval_start += 10
             two_sets_of_asperities = np.array([asperities_1, asperities_2])
             return np.average(two_sets_of_asperities, axis = 0).tolist()
 
@@ -97,16 +97,17 @@ class star_calculator():
 
         for i in range(start_evaluating_note_index, len(self.note_starts)):
             if (time_interval_start + 500 > self.note_starts[i] >= time_interval_start - 500):
-                #     # Column num starts from 1.
+                count = 0
                 note_counts_wrt_columns[self.columns[i]] += 1
-            else: # Stop collecting if out of all notes or out of the time window.
-                next_start_note_index = i
-                break
+                # Step is 10ms, so next time starts from the first note that is included in the next window.
+                if (count == 0 and time_interval_start + 10 <= self.note_starts[i]):
+                    next_start_note_index = i
+                    count += 1
         left_half_columns_int = int(left_half_columns)
         note_counts_wrt_left_columns = note_counts_wrt_columns[:left_half_columns_int]
         note_counts_wrt_right_columns = note_counts_wrt_columns[left_half_columns_int:]
         if (is_empty(note_counts_wrt_left_columns) and is_empty(note_counts_wrt_right_columns)): # If no notes at all:
-            return (16/15, next_start_note_index)
+            return (1/3, next_start_note_index)
         else:
 
             note_count = sum(note_counts_wrt_left_columns) + sum(note_counts_wrt_right_columns)

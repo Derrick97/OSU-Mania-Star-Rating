@@ -43,8 +43,6 @@ class parser():
                        self.read_note(f, line, self.column_count)
 
             except StopIteration:
-                # Test for note data.
-                print(self.od)
                 pass
 
     # Read metadata from .osu file.
