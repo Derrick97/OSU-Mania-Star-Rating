@@ -120,7 +120,7 @@ class star_calculator():
         delta_t = []
         for i in range(len(self.note_starts) - 1):
             delta_t.append(self.note_starts[i + 1] - self.note_starts[i])
-        x = 0.5;
+        x = (64.5 - math.ceil(self.od * 3))/500
         # Questionable: x = 0.5 here.
         intensity_func = lambda t: 1/(t * (t + 0.3 * math.sqrt(x)))
         intensities = list(map(intensity_func, delta_t))
