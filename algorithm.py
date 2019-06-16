@@ -47,6 +47,14 @@ class star_calculator():
     def calculate_X(self):
         pass
 
+
+    def smoother_forX(self):
+        note_value = self.note_value_forX(self)
+        asperities = self.calculate_asperity(self)
+        intensities = self.intensity_forX(self)
+        pass
+
+
     # Calculate Note value v for X Dimension.
     # v = 2T + 1. T = length of the note.
     # Return: array of note values for every note.
@@ -121,12 +129,20 @@ class star_calculator():
         for i in range(len(self.note_starts) - 1):
             delta_t.append(self.note_starts[i + 1] - self.note_starts[i])
         x = (64.5 - math.ceil(self.od * 3))/500
-        # Questionable: x = 0.5 here.
         intensity_func = lambda t: 1/(t * (t + 0.3 * math.sqrt(x)))
         intensities = list(map(intensity_func, delta_t))
         return intensities
 
     def calculate_Y(self):
+        pass
+
+    def note_value_for_gt(self):
+        vs = []
+        for i in range(len(self.note_starts) - 1):
+            vs.append(2*(self.note_starts[i + 1] - self.note_starts[i])+1)
+        return vs
+
+    def intensity_for_gt(self):
         pass
 
     def calculate_Z(self):
