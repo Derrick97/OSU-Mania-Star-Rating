@@ -52,6 +52,7 @@ class star_calculator():
         note_value = self.note_value_forX(self)
         asperities = self.calculate_asperity(self)
         intensities = self.intensity_forX(self)
+
         pass
 
 
@@ -124,10 +125,20 @@ class star_calculator():
 
 
     # Calculate f(t) for X.
+    # Per column.
     def intensity_forX(self):
+        note_starts_wrt_columns = [[] for x in range(7) ]
+        intensities_wrt_columns = [[] for x in range(7) ]
+        for i in range(len(self.note_starts)):
+            note_starts_wrt_columns[self.columns[i]].append(self.note_starts[i])
+        for j in range(self.column_count):
+            intensities_wrt_columns.append(self.intensity_forX_per_column(note_starts_wrt_columns[j]), j)
+        return intensities_wrt_columns
+
+    def intensity_forX_per_column(self, note_starts_wrt_column,column)  :
         delta_t = []
-        for i in range(len(self.note_starts) - 1):
-            delta_t.append(self.note_starts[i + 1] - self.note_starts[i])
+        for i in range(len(note_starts_wrt_column) - 1):
+            delta_t.append(note_starts_wrt_column[i + 1] - note_starts_wrt_column[i])
         x = (64.5 - math.ceil(self.od * 3))/500
         intensity_func = lambda t: 1/(t * (t + 0.3 * math.sqrt(x)))
         intensities = list(map(intensity_func, delta_t))
