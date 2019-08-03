@@ -44,13 +44,6 @@ class star_calculator():
         # print(self.columns)
         # print(len(self.calculate_asperity()))
 
-    #Having an array of the notes' temporal locations is convenient.
-    def time_sequence(self, self.note_starts):
-        current_time=[]
-        for i in range (len(self.note_starts)-1):
-            current_time.append(self.note_starts[i])
-        return current t
-
     def calculate_X(self):
         pass
 
@@ -178,7 +171,25 @@ class star_calculator():
             vs.append(1+2*sum(ln_parts))
         return vs
 
-    def intensity_for_gt(self):
+    def dist_for_gt_note(self):
+        pass
+
+    def dist_for_gt_time(self, self.note_starts, dist_for_gt_note)
+        dist=[]
+        for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
+        #1 ms per step
+        #+0.001 is necessary as the last notes may be concurrent
+            i=len(self.note_starts)-1
+            while self.note_starts[i]>m:
+                i=i-1
+            single=[]
+            for j in range(i-17, i+1): #at most 18 concurrent notes w/o stacking
+                if self.note_starts_j==self.note_starts_i:
+                    single.append(dist_for_gt_note[j])
+            dist.append(sum(single))
+        return dist
+
+    def smoother_for_gt(self, dist_for_gt_time):
         pass
 
     def calculate_Z(self):
