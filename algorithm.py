@@ -183,7 +183,7 @@ class star_calculator():
             while self.note_starts[i]>m:
                 i=i-1
             single=[]
-            for j in range(i-17, i+1): #at most 18 concurrent notes w/o stacking
+            for j in range(max(i-17,0) i+1): #at most 18 concurrent notes w/o stacking
                 if self.note_starts_j==self.note_starts_i:
                     single.append(dist_for_gt_note[j])
             dist.append(sum(single))
