@@ -147,6 +147,20 @@ class star_calculator():
     def calculate_Y(self):
         pass
 
+    def intensity_for_gt(self, self.note_starts):
+        delta_t=[]
+        for i in range(len(self.note_starts) - 1):
+            delta_t.append(self.note_starts[i+1] - self.note_starts[i])
+        x = (64.5 - math.ceil(self.od * 3))/500
+        if delta_t = 0: #jumps/chords
+            intensity_func = 1000*(0.08/x*(1-4.5*x))**(1/4)
+        if 0<delta_t && delta_t<=2*x/3:
+            intensity_func = lambda t: t**(-1)*(0.08*x**(-1)*(1-18*x**(-1)*(t-x/2)**2))**(1/4)
+        else:
+            intensity_func = lambda t: t**(-1)*(0.08*x**(-1)*1-18*x*(x/6)**2))**(1/4)
+        intensities = list(map(intensity_func, delta_t))
+        return intensities
+
     def note_value_for_gt(self):
         vs=[]
         for i in range(len(self.note_starts) - 1):
