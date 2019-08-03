@@ -44,6 +44,13 @@ class star_calculator():
         # print(self.columns)
         # print(len(self.calculate_asperity()))
 
+    #Having an array of the notes' temporal locations is convenient.
+    def time_sequence(self, self.note_starts):
+        current_time=[]
+        for i in range (len(self.note_starts)-1):
+            current_time.append(self.note_starts[i])
+        return current t
+
     def calculate_X(self):
         pass
 
