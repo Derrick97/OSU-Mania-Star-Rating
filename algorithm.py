@@ -148,9 +148,13 @@ class star_calculator():
         pass
 
     def note_value_for_gt(self):
-        vs = []
+        vs=[]
         for i in range(len(self.note_starts) - 1):
-            vs.append(2*(self.note_starts[i + 1] - self.note_starts[i])+1)
+            ln_parts = []
+            for j in range(len(self.note_starts) - 1):
+                if self.note_ends[j]>self.note_starts[i] && self.note_ends[j+1]>self.note_starts[j]:
+                    ln_parts.append(min(self.note_starts[i+1], self.note_ends[i]) - max(self.note_starts[j], self.note_starts[i])) #length contained for each j from i to i+1
+            vs.append(1+2*sum(ln_parts))
         return vs
 
     def intensity_for_gt(self):
