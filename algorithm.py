@@ -195,7 +195,13 @@ class star_calculator():
         return dist
 
     def smoother_for_gt(self, dist_for_gt_time):
-        pass
+        indicators=[]
+        for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
+            convolution=[]
+            for j in range (i-0.5, i+0.5, 0.001):
+                convolution.append(dist_for_gt_time[j])
+            indicators append(0.001*sum(convolution))
+        return indicators
 
     def calculate_Z(self):
         pass
