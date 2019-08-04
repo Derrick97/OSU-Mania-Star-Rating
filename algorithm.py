@@ -274,7 +274,7 @@ class star_calculator():
                 sequence.append(1)
 
     def Y(self, smoother_forY, weight_forY):
-    Y_set=[]
+        Y_set=[]
         for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
             Y_set.append((smoother_forY[i])**4 * weight_forY[i])
         print ((sum(Y_set)/len(self.note_starts))**(1/4))
