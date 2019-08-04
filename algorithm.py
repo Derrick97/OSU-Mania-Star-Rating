@@ -147,7 +147,7 @@ class star_calculator():
     def calculate_Y(self):
         pass
 
-    def intensity_for_gt(self, self.note_starts):
+    def intensity_for_gt_note(self, self.note_starts):
         delta_t=[]
         for i in range(len(self.note_starts) - 1):
             delta_t.append(self.note_starts[i+1] - self.note_starts[i])
@@ -171,11 +171,8 @@ class star_calculator():
             vs.append(1+2*sum(ln_parts))
         return vs
 
-    def dist_for_gt_note(self):
-        pass
-
-    def dist_for_gt_time(self, self.note_starts, dist_for_gt_note)
-        dist=[]
+    def intensity_for_gt_time(self, self.note_starts, intensity_for_gt_note)
+        gt=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
         #1 ms per step
         #+0.001 is necessary as the last notes may be concurrent
@@ -185,8 +182,16 @@ class star_calculator():
             single=[]
             for j in range(max(i-17,0) i+1): #at most 18 concurrent notes w/o stacking
                 if self.note_starts_j==self.note_starts_i:
-                    single.append(dist_for_gt_note[j])
-            dist.append(sum(single))
+                    single.append(intensity_for_gt_note[j])
+            gt.append(sum(single))
+        return gt
+
+    def dist_for_gt(self):
+        dist=[]
+        for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
+            while self.note_starts[i]>m:
+                i=i-1
+            dist.append(note_value_for_gt[i]*Multiplier1*intensity_for_gt_time[m]) #Where is the array of Multiplier 1?
         return dist
 
     def smoother_for_gt(self, dist_for_gt_time):
