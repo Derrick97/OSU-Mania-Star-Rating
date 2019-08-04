@@ -189,6 +189,7 @@ class star_calculator():
     def dist_for_gt(self):
         dist=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
+            i=len(self.note_starts)-1
             while self.note_starts[i]>m:
                 i=i-1
             dist.append(note_value_for_gt[i]*Multiplier1*intensity_for_gt_time[m]) #Where is the array of Multiplier 1?
@@ -200,8 +201,25 @@ class star_calculator():
             convolution=[]
             for j in range (i-0.5, i+0.5, 0.001):
                 convolution.append(dist_for_gt_time[j])
-            indicators append(0.001*sum(convolution))
+            indicators.append(0.001*sum(convolution))
         return indicators
+
+    def weight_forY(self, self.note_starts) #preparation for taking the definite integral
+        sequence=[]
+        for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
+            if i in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]):
+                if self.note_starts.count(i)<=1:
+                    j=len(self.note_starts)-1
+                    while self.note_starts[j]>m:
+                        j=j-1
+                    sequence.append(1/(self.note_starts[j+1]-self.note_starts[j]))
+                if self.note_starts.count(i)>1:
+                    j=len(self.note_starts)-1
+                    while self.note_starts[j]>m:
+                        j=j-1
+                    sequence.append(1/(self.note_starts[j+1]-self.note_starts[j]) + 1000 * (self.note_starts.count(i) - 1))
+            else:
+                sequence.append(1)
 
     def calculate_Z(self):
         pass
