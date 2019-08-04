@@ -161,7 +161,7 @@ class star_calculator():
         intensities = list(map(intensity_func, delta_t))
         return intensities
 
-    def note_value_for_gt(self):
+    def note_value_for_gt(self, self.note_starts, self.note_ends):
         vs=[]
         for i in range(len(self.note_starts) - 1):
             ln_parts = []
@@ -186,7 +186,7 @@ class star_calculator():
             gt.append(sum(single))
         return gt
 
-    def dist_for_gt(self):
+    def dist_for_gt(self, ........): #...What are the variables called?
         dist=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
             i=len(self.note_starts)-1
@@ -202,6 +202,58 @@ class star_calculator():
             for j in range (i-0.5, i+0.5, 0.001):
                 convolution.append(dist_for_gt_time[j])
             indicators.append(0.001*sum(convolution))
+        return indicators
+
+    def intensity_for_ht_note(self, self.note_ends):
+        delta_t=[]
+        for i in range(len(self.note_ends) - 1):
+            delta_t.append(self.note_ends[i+1] - self.note_ends[i])
+        x = (64.5 - math.ceil(self.od * 3))/500
+        intensity_func = lambda t: 0.08*t**(-0.5)/x
+        intensities = list(map(intensity_func, delta_t))
+        return intensities
+
+    def note_value_for_ht(self, self.note_starts, self.note_ends):
+        vs=[]
+        for i in range(len(self.note_ends) - 1):
+            append(1+2*(self.note_ends[i]-self.note_starts[i]))
+        return vs
+
+    def intensity_for_ht_time(self, self.note_ends, intensity_for_ht_note)
+        ht=[]
+        for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
+            i=len(self.note_starts)-1
+            while self.note_ends[i]>m:
+                i=i-1
+            single=[]
+            for j in range(max(i-17,0) i+1):
+                if self.note_starts_j==self.note_starts_i:
+                    single.append(intensity_for_ht_note[j])
+            ht.append(sum(single))
+        return ht
+
+    def dist_for_ht(self, ........): #same
+        dist=[]
+        for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
+            i=len(self.note_starts)-1
+            while self.note_ends[i]>m:
+                i=i-1
+            dist.append(note_value_for_ht[i]*Multiplier1*intensity_for_ht_time[m]) #Where is the array of Multiplier 1?
+        return dist
+
+    def smoother_for_ht(self, dist_for_ht_time):
+        indicators=[]
+        for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
+            convolution=[]
+            for j in range (i-0.5, i+0.5, 0.001):
+                convolution.append(dist_for_ht_time[j])
+            indicators.append(0.001*sum(convolution))
+        return indicators
+
+    def smoother_forY(self, smoother_for_gt, smoother_for_ht):
+        indicators=[]
+        for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
+            indicators.append(smoother_for_gt[i]+smoother_for_ht[i])
         return indicators
 
     def weight_forY(self, self.note_starts) #preparation for taking the definite integral
