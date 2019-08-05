@@ -149,9 +149,9 @@ class star_calculator():
         time_based=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #to match the time range
             i=len(note_starts_wrt_columns) - 1
-        while note_starts_wrt_columns[i]>m:
-            i=i-1
-        time_based.append(intensities[i])
+            while note_starts_wrt_columns[i]>m:
+                i=i-1
+            time_based.append(intensities[i])
         vs=[]
         for i in range(len(note_starts_wrt_columns) - 1):
             append(1+2*(note_ends_wrt_columns[i]-note_starts_wrt_columns[i]))
