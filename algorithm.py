@@ -127,23 +127,63 @@ class star_calculator():
 
     # Calculate f(t) for X.
     # Per column.
-    def intensity_forX(self):
-        note_starts_wrt_columns = [[] for x in range(7) ]
-        intensities_wrt_columns = [[] for x in range(7) ]
+    def X_collection(self):
+        note_starts_wrt_columns = [[] for x in range(self.column_count) ]
+        note_ends_wrt_columns = [[] for x in range(self.column_count) ]
+        J_wrt_columns = [[] for x in range(self.column_count) ]
         for i in range(len(self.note_starts)):
             note_starts_wrt_columns[self.columns[i]].append(self.note_starts[i])
+        for i in range(len(self.note_starts)):
+            note_ends_wrt_columns[self.columns[i]].append(self.note_ends[i])
         for j in range(self.column_count):
-            intensities_wrt_columns.append(self.intensity_forX_per_column(note_starts_wrt_columns[j]), j)
-        return intensities_wrt_columns
+            J_wrt_columns.append(self.J(note_starts_wrt_columns[j]), note_ends_wrt_columns[j], self.note_starts, self.note_ends, j)
+        return J_wrt_columns
 
-    def intensity_forX_per_column(self, note_starts_wrt_column,column)  :
+    def J(self, note_starts_wrt_columns, note_ends_wrt_columns, self.note_starts, self.note_ends, column):
         delta_t = []
-        for i in range(len(note_starts_wrt_column) - 1):
-            delta_t.append(note_starts_wrt_column[i + 1] - note_starts_wrt_column[i])
+        for i in range(len(note_starts_wrt_columns) - 1):
+            delta_t.append(note_starts_wrt_columns[i + 1] - note_starts_wrt_columns[i])
         x = (64.5 - math.ceil(self.od * 3))/500
         intensity_func = lambda t: 1/(t * (t + 0.3 * math.sqrt(x)))
         intensities = list(map(intensity_func, delta_t))
-        return intensities
+        time_based=[]
+        for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #to match the time range
+            i=len(note_starts_wrt_columns) - 1
+        while note_starts_wrt_columns[i]>m:
+            i=i-1
+        time_based.append(intensities[i])
+        vs=[]
+        for i in range(len(note_starts_wrt_columns) - 1):
+            append(1+2*(note_ends_wrt_columns[i]-note_starts_wrt_columns[i]))
+        dist=[]
+        for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #same, agreememt
+            i=len(self.note_starts)-1
+            while self.note_starts[i]>m:
+                i=i-1
+            dist.append(vs[i] * (calculate_asperity[m]+5)/5 * intensities[m])
+        indicators=[]
+        for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
+            convolution=[]
+            for j in range (i-0.5, i+0.5, 0.001):
+                convolution.append(dist_for_ht_time[j])
+            indicators.append(0.001*sum(convolution))
+        weight=[]
+        for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
+            if i in range (note_starts_wrt_columns[0], note_ends_wrt_columns[len(self.note_starts)-1]):
+                j=len(note_starts_wrt_columns)-1
+                while self.note_starts[j]>m:
+                    j=j-1
+                weight.append(1/(note_starts_wrt_columns[j+1]-note_starts_wrt_columns[j]))
+            else:
+                weight.append(1)
+        J_set=[]
+        for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
+            J_set.append((indicators[i])**4 * weight[i])
+        return (sum(J_set)/len(note_starts_wrt_columns)*len(note_starts_wrt_columns))  #this is J to the 4th power times the no. of notes
+
+    def X(self, X_collection):
+        print ((sum(X_collection)/self.column_count)**(1/4))
+        return ((sum(X_collection)/self.column_count)**(1/4))
 
     def calculate_Y(self):
         pass
@@ -181,7 +221,7 @@ class star_calculator():
             while self.note_starts[i]>m:
                 i=i-1
             single=[]
-            for j in range(max(i-17,0) i+1): #at most 18 concurrent notes w/o stacking
+            for j in range(max(i-9,0) i+1): #at most 10 concurrent notes w/o stacking
                 if self.note_starts_j==self.note_starts_i:
                     single.append(intensity_for_gt_note[j])
             gt.append(sum(single))
@@ -227,7 +267,7 @@ class star_calculator():
             while self.note_ends[i]>m:
                 i=i-1
             single=[]
-            for j in range(max(i-17,0) i+1):
+            for j in range(max(i-9,0) i+1):
                 if self.note_starts_j==self.note_starts_i:
                     single.append(intensity_for_ht_note[j])
             ht.append(sum(single))
@@ -239,7 +279,7 @@ class star_calculator():
             i=len(self.note_starts)-1
             while self.note_ends[i]>m:
                 i=i-1
-            dist.append(note_value_for_ht[i]*Multiplier1*intensity_for_ht_time[m]) #Where is the array of Multiplier 1?
+            dist.append(note_value_for_ht[i] * (calculate_asperity[m]+5)/5 * intensity_for_ht_time[m])
         return dist
 
     def smoother_for_ht(self, dist_for_ht_time):
