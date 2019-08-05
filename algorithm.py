@@ -71,8 +71,9 @@ class star_calculator():
 
     # Calculate asperity. The asperity is count inside every [-0.5s, +0.5s] window.
     # Step = 10ms here.
+    # I changed it to 1 ms.
     def calculate_asperity(self):
-        time_interval_start = 0
+        time_interval_start = self.note_starts[0] - 500
         left_half_columns = right_half_columns = -1
         start_evaluating_note_index = 0
         if (self.column_count % 2 == 0):
@@ -82,7 +83,7 @@ class star_calculator():
                 local_asperity = self.asperity_in_window(left_half_columns, right_half_columns, time_interval_start, start_evaluating_note_index)
                 asperities.append(local_asperity[0])
                 start_evaluating_note_index = local_asperity[1]
-                time_interval_start += 10
+                time_interval_start += 1
             return asperities
         else:
             asperities_1 = asperities_2 = []
@@ -94,10 +95,10 @@ class star_calculator():
                 local_asperity = self.asperity_in_window(right_half_columns, left_half_columns, time_interval_start, start_evaluating_note_index)
                 asperities_2.append(local_asperity[0])
                 start_evaluating_note_index = local_asperity[1]
-                time_interval_start += 10
+                time_interval_start += 1
             two_sets_of_asperities = np.array([asperities_1, asperities_2])
             return np.average(two_sets_of_asperities, axis = 0).tolist()
-
+    #Technically the array is not the “asperities” defined in the paper but rather “the asperities/N,” N for the number of notes in the window.
 
 
     def asperity_in_window(self, left_half_columns, right_half_columns, time_interval_start, start_evaluating_note_index):
@@ -109,7 +110,7 @@ class star_calculator():
                 count = 0
                 note_counts_wrt_columns[self.columns[i]] += 1
                 # Step is 10ms, so next time starts from the first note that is included in the next window.
-                if (count == 0 and time_interval_start + 10 <= self.note_starts[i]):
+                if (count == 0 and time_interval_start + 1 <= self.note_starts[i]):
                     next_start_note_index = i
                     count += 1
         left_half_columns_int = int(left_half_columns)
@@ -186,13 +187,13 @@ class star_calculator():
             gt.append(sum(single))
         return gt
 
-    def dist_for_gt(self, ........): #...What are the variables called?
+    def dist_for_gt(self, self.note_starts, self.note_ends, note_value_for_gt, calculate_asperity, intensity_for_gt_time): #...What are the variables called?
         dist=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
             i=len(self.note_starts)-1
             while self.note_starts[i]>m:
                 i=i-1
-            dist.append(note_value_for_gt[i]*Multiplier1*intensity_for_gt_time[m]) #Where is the array of Multiplier 1?
+            dist.append(note_value_for_gt[i] * (calculate_asperity[m]+5)/5 * intensity_for_gt_time[m])
         return dist
 
     def smoother_for_gt(self, dist_for_gt_time):
@@ -232,7 +233,7 @@ class star_calculator():
             ht.append(sum(single))
         return ht
 
-    def dist_for_ht(self, ........): #same
+    def dist_for_ht(self, self.note_starts, self.note_ends, note_value_for_ht, calculate_asperity, intensity_for_ht_time):
         dist=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
             i=len(self.note_starts)-1
