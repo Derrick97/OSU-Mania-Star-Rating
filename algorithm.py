@@ -121,7 +121,21 @@ class star_calculator():
             note_count = sum(note_counts_wrt_left_columns) + sum(note_counts_wrt_right_columns)
             return ((asperity_help(note_counts_wrt_left_columns) + asperity_help(note_counts_wrt_right_columns)) / note_count, next_start_note_index)
 
-
+    def time_to_note(self, self.note_starts, self.note_ends):
+        index = []
+        for m in range (0, self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #from t=0
+            i=len(note_starts_wrt_columns) - 1
+            while note_starts_wrt_columns[i]>m:
+                i=i-1
+            index.append(i) #can be as low as -1 and as high as len(self.note_starts) - 1
+ 
+    def time_to_note_end(self, self.note_starts, self.note_ends):
+        index = []
+        for m in range (0, self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #from t=0
+            i=len(note_starts_wrt_columns) - 1
+            while note_ends_wrt_columns[i]>m:
+                i=i-1
+            index.append(i) #can be as low as -1 and as high as len(self.note_starts) - 1
 
     # Calculate f(t) for X.
     # Per column.
@@ -131,13 +145,25 @@ class star_calculator():
         J_wrt_columns = [[] for x in range(self.column_count) ]
         for i in range(len(self.note_starts)):
             note_starts_wrt_columns[self.columns[i]].append(self.note_starts[i])
-        for i in range(len(self.note_starts)):
             note_ends_wrt_columns[self.columns[i]].append(self.note_ends[i])
         for j in range(self.column_count):
             J_wrt_columns.append(self.J(note_starts_wrt_columns[j]), note_ends_wrt_columns[j], self.note_starts, self.note_ends, j)
         return J_wrt_columns
+ 
+    def time_to_note_per_column(self, self.note_starts, self.note_ends, note_starts_wrt_columns, note_ends_wrt_columns, column):
+        2D = []
+        for i in range (self.column_count):
+            index = []
+                for m in range (0, note_ends_wrt_column[i][len(note_starts_wrt_columns)-1]+0.001, 0.001): #from t=0
+                    j=len(note_starts_wrt_columns[i]) - 1
+                    while note_starts_wrt_columns[i][j]>m:
+                        j=j-1
+                index.append(j)
+            2D.append(index)
+        return 2D
 
-    def J(self, note_starts_wrt_columns, note_ends_wrt_columns, self.note_starts, self.note_ends, column):
+    
+    def J(self, note_starts_wrt_columns, note_ends_wrt_columns, self.note_starts, self.note_ends, time_to_note_per_column, column):
         delta_t = []
         for i in range(len(note_starts_wrt_columns) - 1):
             delta_t.append(note_starts_wrt_columns[i + 1] - note_starts_wrt_columns[i])
@@ -146,18 +172,14 @@ class star_calculator():
         intensities = list(map(intensity_func, delta_t))
         time_based=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #to match the time range
-            i=len(note_starts_wrt_columns) - 1
-            while note_starts_wrt_columns[i]>m:
-                i=i-1
+            i=time_to_note_per_column[m]
             time_based.append(intensities[i])
         vs=[]
         for i in range(len(note_starts_wrt_columns) - 1):
             append(1+2*(note_ends_wrt_columns[i]-note_starts_wrt_columns[i]))
         dist=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #same, agreememt
-            i=len(self.note_starts)-1
-            while self.note_starts[i]>m:
-                i=i-1
+            i=time_to_note_per_column[m]
             dist.append(vs[i] * (calculate_asperity[m]+5)/5 * intensities[m])
         indicators=[]
         for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
@@ -168,9 +190,7 @@ class star_calculator():
         weight=[]
         for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
             if i in range (note_starts_wrt_columns[0], note_ends_wrt_columns[len(self.note_starts)-1]):
-                j=len(note_starts_wrt_columns)-1
-                while self.note_starts[j]>m:
-                    j=j-1
+                i=time_to_note_per_column[m]
                 weight.append(1/(note_starts_wrt_columns[j+1]-note_starts_wrt_columns[j]))
             else:
                 weight.append(1)
@@ -215,9 +235,7 @@ class star_calculator():
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
         #1 ms per step
         #+0.001 is necessary as the last notes may be concurrent
-            i=len(self.note_starts)-1
-            while self.note_starts[i]>m:
-                i=i-1
+            i=time_to_note[m]
             single=[]
             for j in range(max(i-9,0) i+1): #at most 10 concurrent notes w/o stacking
                 if self.note_starts_j==self.note_starts_i:
@@ -228,9 +246,7 @@ class star_calculator():
     def dist_for_gt(self, self.note_starts, self.note_ends, note_value_for_gt, calculate_asperity, intensity_for_gt_time): #...What are the variables called?
         dist=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
-            i=len(self.note_starts)-1
-            while self.note_starts[i]>m:
-                i=i-1
+            i=time_to_note[m]
             dist.append(note_value_for_gt[i] * (calculate_asperity[m]+5)/5 * intensity_for_gt_time[m])
         return dist
 
@@ -261,9 +277,7 @@ class star_calculator():
     def intensity_for_ht_time(self, self.note_ends, intensity_for_ht_note)
         ht=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
-            i=len(self.note_starts)-1
-            while self.note_ends[i]>m:
-                i=i-1
+            i=time_to_note_end[m]
             single=[]
             for j in range(max(i-9,0) i+1):
                 if self.note_starts_j==self.note_starts_i:
@@ -274,9 +288,7 @@ class star_calculator():
     def dist_for_ht(self, self.note_starts, self.note_ends, note_value_for_ht, calculate_asperity, intensity_for_ht_time):
         dist=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
-            i=len(self.note_starts)-1
-            while self.note_ends[i]>m:
-                i=i-1
+            i=time_to_note_end[m]
             dist.append(note_value_for_ht[i] * (calculate_asperity[m]+5)/5 * intensity_for_ht_time[m])
         return dist
 
@@ -301,14 +313,10 @@ class star_calculator():
         for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
             if i in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]):
                 if self.note_starts.count(i)<=1:
-                    j=len(self.note_starts)-1
-                    while self.note_starts[j]>m:
-                        j=j-1
+                    j=time_to_note[m]
                     sequence.append(1/(self.note_starts[j+1]-self.note_starts[j]))
                 if self.note_starts.count(i)>1:
-                    j=len(self.note_starts)-1
-                    while self.note_starts[j]>m:
-                        j=j-1
+                    j=time_to_note[m]
                     sequence.append(1/(self.note_starts[j+1]-self.note_starts[j]) + 1000 * (self.note_starts.count(i) - 1))
             else:
                 sequence.append(1)
