@@ -52,7 +52,6 @@ class star_calculator():
         note_value = self.note_value_forX(self)
         asperities = self.calculate_asperity(self)
         intensities = self.intensity_forX(self)
-
         pass
 
 
@@ -119,7 +118,6 @@ class star_calculator():
         if (is_empty(note_counts_wrt_left_columns) and is_empty(note_counts_wrt_right_columns)): # If no notes at all:
             return (1/3, next_start_note_index)
         else:
-
             note_count = sum(note_counts_wrt_left_columns) + sum(note_counts_wrt_right_columns)
             return ((asperity_help(note_counts_wrt_left_columns) + asperity_help(note_counts_wrt_right_columns)) / note_count, next_start_note_index)
 
@@ -194,7 +192,7 @@ class star_calculator():
             delta_t.append(self.note_starts[i+1] - self.note_starts[i])
         x = (64.5 - math.ceil(self.od * 3))/500
         if delta_t = 0: #jumps/chords
-            intensity_func = 1000*(0.08/x*(1-4.5*x))**(1/4)
+            intensity_func = 1000*(0.08/x*(1-4.5*x))**(1/4) #for numerical estimation of Dirac delta function
         if 0<delta_t && delta_t<=2*x/3:
             intensity_func = lambda t: t**(-1)*(0.08*x**(-1)*(1-18*x**(-1)*(t-x/2)**2))**(1/4)
         else:
@@ -298,6 +296,7 @@ class star_calculator():
         return indicators
 
     def weight_forY(self, self.note_starts) #preparation for taking the definite integral
+        #essentially the transformation from dt to dn.
         sequence=[]
         for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
             if i in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]):
@@ -320,7 +319,7 @@ class star_calculator():
             Y_set.append((smoother_forY[i])**4 * weight_forY[i])
         print ((sum(Y_set)/len(self.note_starts))**(1/4))
         return ((sum(Y_set)/len(self.note_starts))**(1/4)) #in the denominator +1 is unnecessary.
-        #Not awarding extremely short maps
+        #Not rewarding extremely short maps
 
     def calculate_Z(self):
         pass
