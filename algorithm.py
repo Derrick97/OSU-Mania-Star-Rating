@@ -197,8 +197,6 @@ class star_calculator():
                 else:
                     weight = 1
                 J_single.append((indicator)**4 * weight) #this is J to the 4th power times the no. of notes
-            for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
-                J_single.append((indicators[i])**4 * weight[i]) #this is J to the 4th power times the no. of notes
             J_collection.append(sum(J_single))  
         return (J_collection)
 
