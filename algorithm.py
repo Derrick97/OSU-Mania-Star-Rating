@@ -154,15 +154,14 @@ class star_calculator():
         D = []
         for i in range (self.column_count):
             index = []
-                for m in range (0, note_ends_wrt_column[i][len(note_starts_wrt_columns)-1]+0.001, 0.001): #from t=0
-                    j=len(note_starts_wrt_columns[i]) - 1
-                    while note_starts_wrt_columns[i][j]>m:
-                        j=j-1
+            for m in range (0, note_ends_wrt_column[i][len(note_starts_wrt_columns)-1]+0.001, 0.001): #from t=0
+                j=len(note_starts_wrt_columns[i]) - 1
+                while note_starts_wrt_columns[i][j]>m:
+                    j=j-1
                 index.append(j)
             D.append(index)
         return D
 
-    
     def J(self, note_starts_wrt_columns, note_ends_wrt_columns, self.note_starts, self.note_ends, time_to_note_per_column, column):
         J_collection=[]
         for k in range (self.column_count):
@@ -199,18 +198,15 @@ class star_calculator():
                     weight.append(1/(note_starts_fixed_column[j+1]-note_starts_fixed_column[j]))
                 else:
                     weight.append(1)
-            J_set=[]
+            J_single=[]
             for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
-                J_set.append((indicators[i])**4 * weight[i])
-            return (sum(J_set)/len(note_starts_fixed_column)*len(note_starts_fixed_column))  #this is J to the 4th power times the no. of notes
-            J_collection.append(J_set)
-        print (J_collection)
+                J_single.append((indicators[i])**4 * weight[i]) #this is J to the 4th power times the no. of notes
+            J_collection.append(sum(J_single))  
         return (J_collection)
 
     def X(self, J):
+        print((sum(J)/self.column_count)**(1/4))
         return ((sum(J)/self.column_count)**(1/4))
-
-    print (X)
 
     def calculate_Y(self):
         pass
