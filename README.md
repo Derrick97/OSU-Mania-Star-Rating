@@ -13,7 +13,7 @@ Current Status Summary: Can print metadata, able to read notes from .osu file.
 All code are based on python 3.6.8. Make sure you have at least python 3.4 installed.
 
 For Windows Users:
-1. ctrl + r, type "cmd", open the terminal.
+1. Win + R, type "cmd", open the terminal.
 2. cd into the directory, type this command into the terminal, replace 'filename' with the path of the .osu file, and press enter.
  ```bash
 python main.py ('filename')
