@@ -185,20 +185,18 @@ class star_calculator():
             for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #same, agreememt
                 i=time_to_note_fixed_column[m]
                 dist.append(vs[i] * (calculate_asperity[m]+5)/5 * intensities[m])
-            indicators=[]
+            J_single = []
             for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
                 convolution=[]
                 for j in range (i-0.5, i+0.5, 0.001):
                     convolution.append(dist_for_ht_time[j])
-                indicators.append(0.001*sum(convolution))
-            weight=[]
-            for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
+                indicator = 0.001*sum(convolution)
                 if i in range (note_starts_fixed_column[0], note_ends_fixed_column[len(self.note_starts)-1]):
                     i=time_to_note_fixed_column[m]
-                    weight.append(1/(note_starts_fixed_column[j+1]-note_starts_fixed_column[j]))
+                    weight = 1/(note_starts_fixed_column[j+1]-note_starts_fixed_column[j])
                 else:
-                    weight.append(1)
-            J_single=[]
+                    weight = 1
+                J_single.append((indicator)**4 * weight) #this is J to the 4th power times the no. of notes
             for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
                 J_single.append((indicators[i])**4 * weight[i]) #this is J to the 4th power times the no. of notes
             J_collection.append(sum(J_single))  
