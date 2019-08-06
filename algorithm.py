@@ -142,16 +142,16 @@ class star_calculator():
     def X_collection(self):
         note_starts_wrt_columns = [[] for x in range(self.column_count) ]
         note_ends_wrt_columns = [[] for x in range(self.column_count) ]
-        J_wrt_columns = [[] for x in range(self.column_count) ]
+        J = [[] for x in range(self.column_count) ]
         for i in range(len(self.note_starts)):
             note_starts_wrt_columns[self.columns[i]].append(self.note_starts[i])
             note_ends_wrt_columns[self.columns[i]].append(self.note_ends[i])
         for j in range(self.column_count):
-            J_wrt_columns.append(self.J(note_starts_wrt_columns[j]), note_ends_wrt_columns[j], self.note_starts, self.note_ends, j)
-        return J_wrt_columns
+            J.append(self, J(note_starts_wrt_columns[j]), note_ends_wrt_columns[j], self.note_starts, self.note_ends, j)
+        return J
  
     def time_to_note_per_column(self, self.note_starts, self.note_ends, note_starts_wrt_columns, note_ends_wrt_columns, column):
-        2D = []
+        D = []
         for i in range (self.column_count):
             index = []
                 for m in range (0, note_ends_wrt_column[i][len(note_starts_wrt_columns)-1]+0.001, 0.001): #from t=0
@@ -159,49 +159,58 @@ class star_calculator():
                     while note_starts_wrt_columns[i][j]>m:
                         j=j-1
                 index.append(j)
-            2D.append(index)
-        return 2D
+            D.append(index)
+        return D
 
     
     def J(self, note_starts_wrt_columns, note_ends_wrt_columns, self.note_starts, self.note_ends, time_to_note_per_column, column):
-        delta_t = []
-        for i in range(len(note_starts_wrt_columns) - 1):
-            delta_t.append(note_starts_wrt_columns[i + 1] - note_starts_wrt_columns[i])
-        x = (64.5 - math.ceil(self.od * 3))/500
-        intensity_func = lambda t: 1/(t * (t + 0.3 * math.sqrt(x)))
-        intensities = list(map(intensity_func, delta_t))
-        time_based=[]
-        for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #to match the time range
-            i=time_to_note_per_column[m]
-            time_based.append(intensities[i])
-        vs=[]
-        for i in range(len(note_starts_wrt_columns) - 1):
-            append(1+2*(note_ends_wrt_columns[i]-note_starts_wrt_columns[i]))
-        dist=[]
-        for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #same, agreememt
-            i=time_to_note_per_column[m]
-            dist.append(vs[i] * (calculate_asperity[m]+5)/5 * intensities[m])
-        indicators=[]
-        for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
-            convolution=[]
-            for j in range (i-0.5, i+0.5, 0.001):
-                convolution.append(dist_for_ht_time[j])
-            indicators.append(0.001*sum(convolution))
-        weight=[]
-        for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
-            if i in range (note_starts_wrt_columns[0], note_ends_wrt_columns[len(self.note_starts)-1]):
-                i=time_to_note_per_column[m]
-                weight.append(1/(note_starts_wrt_columns[j+1]-note_starts_wrt_columns[j]))
-            else:
-                weight.append(1)
-        J_set=[]
-        for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
-            J_set.append((indicators[i])**4 * weight[i])
-        return (sum(J_set)/len(note_starts_wrt_columns)*len(note_starts_wrt_columns))  #this is J to the 4th power times the no. of notes
+        J_collection=[]
+        for k in range (self.column_count):
+            note_starts_fixed_column=note_starts_wrt_columns[k]
+            note_ends_fixed_column=note_ends_wrt_columns[k]
+            time_to_note_fixed_column=time_to_note_per_column[k]
+            delta_t = []
+            for i in range(len(note_starts_fixed_column) - 1):
+                delta_t.append(note_starts_fixed_column[i + 1] - note_starts_fixed_column[i])
+            x = (64.5 - math.ceil(self.od * 3))/500
+            intensity_func = lambda t: 1/(t * (t + 0.3 * math.sqrt(x)))
+            intensities = list(map(intensity_func, delta_t))
+            time_based=[]
+            for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #to match the time range
+                i=time_to_note_fixed_column[m]
+                time_based.append(intensities[i])
+            vs=[]
+            for i in range(len(note_starts_fixed_column) - 1):
+                append(1+2*(note_ends_fixed_column[i]-note_starts_fixed_column[i]))
+            dist=[]
+            for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #same, agreememt
+                i=time_to_note_fixed_column[m]
+                dist.append(vs[i] * (calculate_asperity[m]+5)/5 * intensities[m])
+            indicators=[]
+            for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
+                convolution=[]
+                for j in range (i-0.5, i+0.5, 0.001):
+                    convolution.append(dist_for_ht_time[j])
+                indicators.append(0.001*sum(convolution))
+            weight=[]
+            for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
+                if i in range (note_starts_fixed_column[0], note_ends_fixed_column[len(self.note_starts)-1]):
+                    i=time_to_note_fixed_column[m]
+                    weight.append(1/(note_starts_fixed_column[j+1]-note_starts_fixed_column[j]))
+                else:
+                    weight.append(1)
+            J_set=[]
+            for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
+                J_set.append((indicators[i])**4 * weight[i])
+            return (sum(J_set)/len(note_starts_fixed_column)*len(note_starts_fixed_column))  #this is J to the 4th power times the no. of notes
+            J_collection.append(J_set)
+        print (J_collection)
+        return (J_collection)
 
-    def X(self, X_collection):
-        print ((sum(X_collection)/self.column_count)**(1/4))
-        return ((sum(X_collection)/self.column_count)**(1/4))
+    def X(self, J):
+        return ((sum(J)/self.column_count)**(1/4))
+
+    print (X)
 
     def calculate_Y(self):
         pass
