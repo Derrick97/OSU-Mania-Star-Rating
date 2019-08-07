@@ -191,7 +191,7 @@ class star_calculator():
                 for j in range (i-0.5, i+0.5, 0.001):
                     convolution.append(dist_for_ht_time[int(j*1000)])
                 indicator = 0.001*sum(convolution)
-                if i in range (note_starts_fixed_column[0], note_ends_fixed_column[len(self.note_starts)-1]):
+                if note_starts_fixed_column[0] <= i < note_ends_fixed_column[len(self.note_starts)-1]:
                     j=time_to_note_fixed_column[int(i*1000)]
                     weight = 1/(note_starts_fixed_column[j+1]-note_starts_fixed_column[j])
                 else:
@@ -214,7 +214,7 @@ class star_calculator():
         x = (64.5 - math.ceil(self.od * 3))/500
         if delta_t = 0: #jumps/chords
             intensity_func = 1000*(0.08/x*(1-4.5*x))**(1/4) #for numerical estimation of Dirac delta function
-        if 0<delta_t && delta_t<=2*x/3:
+        if 0<delta_t & delta_t<=2*x/3:
             intensity_func = lambda t: t**(-1)*(0.08*x**(-1)*(1-18*x**(-1)*(t-x/2)**2))**(1/4)
         else:
             intensity_func = lambda t: t**(-1)*(0.08*x**(-1)*1-18*x*(x/6)**2))**(1/4)
@@ -226,7 +226,7 @@ class star_calculator():
         for i in range(len(self.note_starts) - 1):
             ln_parts = []
             for j in range(len(self.note_starts) - 1):
-                if self.note_ends[j]>self.note_starts[i] && self.note_ends[j+1]>self.note_starts[j]:
+                if self.note_ends[j]>self.note_starts[i] & self.note_ends[j+1]>self.note_starts[j]:
                     ln_parts.append(min(self.note_starts[i+1], self.note_ends[i]) - max(self.note_starts[j], self.note_starts[i])) #length contained for each j from i to i+1
             vs.append(1+2*sum(ln_parts))
         return vs
