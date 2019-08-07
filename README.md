@@ -1,5 +1,6 @@
-# ATTENTION
+# Attention
 Before testing, please make sure that your beatmap doesn't contain any notes that are stacked together. Also, the program cannot properly assess a beatmap originated from another one having a different key number.
+Beatmaps with more than 10 keys are currently not covered by the algorithm.
 
 # OSU-Mania-Star-Rating
 The entire algorithm is based on [Crz]sunnyxxy and ChlorieHCl's paper. Available here: https://docs.google.com/document/d/1BwbIftjamRm817JKht_U-Yv1W6wqQJjHv_pSj9WtAtc/edit
