@@ -176,23 +176,23 @@ class star_calculator():
             intensities = list(map(intensity_func, delta_t))
             time_based=[]
             for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #to match the time range
-                i=time_to_note_fixed_column[m]
+                i=time_to_note_fixed_column[int(m*1000)] #m is in sec, but the time_to_note array is per ms.
                 time_based.append(intensities[i])
             vs=[]
             for i in range(len(note_starts_fixed_column) - 1):
                 append(1+2*(note_ends_fixed_column[i]-note_starts_fixed_column[i]))
             dist=[]
             for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #same, agreememt
-                i=time_to_note_fixed_column[m]
-                dist.append(vs[i] * (calculate_asperity[m]+5)/5 * intensities[m])
+                i=time_to_note_fixed_column[int(m*1000)]
+                dist.append(vs[i] * (calculate_asperity[int(m*1000)]+5)/5 * intensities[int(m*1000)])
             J_single = []
             for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
                 convolution=[]
                 for j in range (i-0.5, i+0.5, 0.001):
-                    convolution.append(dist_for_ht_time[j])
+                    convolution.append(dist_for_ht_time[int(j*1000)])
                 indicator = 0.001*sum(convolution)
                 if i in range (note_starts_fixed_column[0], note_ends_fixed_column[len(self.note_starts)-1]):
-                    j=time_to_note_fixed_column[i]
+                    j=time_to_note_fixed_column[int(i*1000)]
                     weight = 1/(note_starts_fixed_column[j+1]-note_starts_fixed_column[j])
                 else:
                     weight = 1
@@ -236,7 +236,7 @@ class star_calculator():
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
         #1 ms per step
         #+0.001 is necessary as the last notes may be concurrent
-            i=time_to_note[m]
+            i=time_to_note[int(m*1000)]
             single=[]
             for j in range(max(i-9,0) i+1): #at most 10 concurrent notes w/o stacking
                 if self.note_starts_j==self.note_starts_i:
@@ -247,8 +247,8 @@ class star_calculator():
     def dist_for_gt(self, self.note_starts, self.note_ends, note_value_for_gt, calculate_asperity, intensity_for_gt_time): #...What are the variables called?
         dist=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
-            i=time_to_note[m]
-            dist.append(note_value_for_gt[i] * (calculate_asperity[m]+5)/5 * intensity_for_gt_time[m])
+            i=time_to_note[int(m*1000)]
+            dist.append(note_value_for_gt[i] * (calculate_asperity[int(m*1000)]+5)/5 * intensity_for_gt_time[int(m*1000)])
         return dist
 
     def smoother_for_gt(self, dist_for_gt_time):
@@ -256,7 +256,7 @@ class star_calculator():
         for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
             convolution=[]
             for j in range (i-0.5, i+0.5, 0.001):
-                convolution.append(dist_for_gt_time[j])
+                convolution.append(dist_for_gt[int(j*1000)])
             indicators.append(0.001*sum(convolution))
         return indicators
 
@@ -278,7 +278,7 @@ class star_calculator():
     def intensity_for_ht_time(self, self.note_ends, intensity_for_ht_note)
         ht=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
-            i=time_to_note_end[m]
+            i=time_to_note_end[int(m*1000)]
             single=[]
             for j in range(max(i-9,0) i+1):
                 if self.note_starts_j==self.note_starts_i:
@@ -289,8 +289,8 @@ class star_calculator():
     def dist_for_ht(self, self.note_starts, self.note_ends, note_value_for_ht, calculate_asperity, intensity_for_ht_time):
         dist=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
-            i=time_to_note_end[m]
-            dist.append(note_value_for_ht[i] * (calculate_asperity[m]+5)/5 * intensity_for_ht_time[m])
+            i=time_to_note_end[int(m*1000)]
+            dist.append(note_value_for_ht[i] * (calculate_asperity[int(m*1000)]+5)/5 * intensity_for_ht_time[int(m*1000)])
         return dist
 
     def smoother_for_ht(self, dist_for_ht_time):
@@ -298,26 +298,26 @@ class star_calculator():
         for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
             convolution=[]
             for j in range (i-0.5, i+0.5, 0.001):
-                convolution.append(dist_for_ht_time[j])
+                convolution.append(dist_for_ht[int(j*1000)])
             indicators.append(0.001*sum(convolution))
         return indicators
 
     def smoother_forY(self, smoother_for_gt, smoother_for_ht):
         indicators=[]
         for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
-            indicators.append(smoother_for_gt[i]+smoother_for_ht[i])
+            indicators.append(smoother_for_gt[int(i*1000)]+smoother_for_ht[int(i*1000)])
         return indicators
 
     def weight_forY(self, self.note_starts) #preparation for taking the definite integral
         #essentially the transformation from dt to dn.
         sequence=[]
         for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
-            if i in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]):
+            if i in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1], 0.001):
                 if self.note_starts.count(i)<=1:
-                    j=time_to_note[m]
+                    j=time_to_note[int(i*1000)]
                     sequence.append(1/(self.note_starts[j+1]-self.note_starts[j]))
                 if self.note_starts.count(i)>1:
-                    j=time_to_note[m]
+                    j=time_to_note[int(i*1000)]
                     sequence.append(1/(self.note_starts[j+1]-self.note_starts[j]) + 1000 * (self.note_starts.count(i) - 1))
             else:
                 sequence.append(1)
@@ -325,7 +325,7 @@ class star_calculator():
     def Y(self, smoother_forY, weight_forY):
         Y_set=[]
         for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
-            Y_set.append((smoother_forY[i])**4 * weight_forY[i])
+            Y_set.append((smoother_forY[int(i*1000)])**4 * weight_forY[int(i*1000)])
         print ((sum(Y_set)/len(self.note_starts))**(1/4))
         return ((sum(Y_set)/len(self.note_starts))**(1/4)) #in the denominator +1 is unnecessary.
         #Not rewarding extremely short maps
