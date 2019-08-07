@@ -192,7 +192,7 @@ class star_calculator():
                     convolution.append(dist_for_ht_time[j])
                 indicator = 0.001*sum(convolution)
                 if i in range (note_starts_fixed_column[0], note_ends_fixed_column[len(self.note_starts)-1]):
-                    i=time_to_note_fixed_column[m]
+                    j=time_to_note_fixed_column[i]
                     weight = 1/(note_starts_fixed_column[j+1]-note_starts_fixed_column[j])
                 else:
                     weight = 1
