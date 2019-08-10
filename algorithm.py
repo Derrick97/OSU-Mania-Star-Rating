@@ -121,7 +121,7 @@ class star_calculator():
             note_count = sum(note_counts_wrt_left_columns) + sum(note_counts_wrt_right_columns)
             return ((asperity_help(note_counts_wrt_left_columns) + asperity_help(note_counts_wrt_right_columns)) / note_count, next_start_note_index)
 
-    def time_to_note(self, self.note_starts, self.note_ends):
+    def time_to_note(self, note_starts, note_ends):
         index = []
         for m in range(0, self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #from t=0
             i=len(note_starts_wrt_columns) - 1
@@ -129,7 +129,7 @@ class star_calculator():
                 i=i-1
             index.append(i) #can be as low as -1 and as high as len(self.note_starts) - 1
  
-    def time_to_note_end(self, self.note_starts, self.note_ends):
+    def time_to_note_end(self, note_starts, note_ends):
         index = []
         for m in range(0, self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #from t=0
             i=len(note_starts_wrt_columns) - 1
