@@ -123,7 +123,7 @@ class star_calculator():
 
     def time_to_note(self, self.note_starts, self.note_ends):
         index = []
-        for m in range (0, self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #from t=0
+        for m in range(0, self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #from t=0
             i=len(note_starts_wrt_columns) - 1
             while note_starts_wrt_columns[i]>m:
                 i=i-1
@@ -131,7 +131,7 @@ class star_calculator():
  
     def time_to_note_end(self, self.note_starts, self.note_ends):
         index = []
-        for m in range (0, self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #from t=0
+        for m in range(0, self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #from t=0
             i=len(note_starts_wrt_columns) - 1
             while note_ends_wrt_columns[i]>m:
                 i=i-1
@@ -150,11 +150,11 @@ class star_calculator():
             J.append(self, J(note_starts_wrt_columns[j]), note_ends_wrt_columns[j], self.note_starts, self.note_ends, j)
         return J
  
-    def time_to_note_per_column(self, self.note_starts, self.note_ends, note_starts_wrt_columns, note_ends_wrt_columns, column):
+    def time_to_note_per_column(self, note_starts, note_ends, note_starts_wrt_columns, note_ends_wrt_columns, column):
         D = []
-        for i in range (self.column_count):
+        for i in range(self.column_count):
             index = []
-            for m in range (0, note_ends_wrt_column[i][len(note_starts_wrt_columns)-1]+0.001, 0.001): #from t=0
+            for m in range(0, note_ends_wrt_column[i][len(note_starts_wrt_columns)-1]+0.001, 0.001): #from t=0
                 j=len(note_starts_wrt_columns[i]) - 1
                 while note_starts_wrt_columns[i][j]>m:
                     j=j-1
@@ -162,9 +162,9 @@ class star_calculator():
             D.append(index)
         return D
 
-    def J(self, note_starts_wrt_columns, note_ends_wrt_columns, self.note_starts, self.note_ends, time_to_note_per_column, column):
+    def J(self, note_starts_wrt_columns, note_ends_wrt_columns, note_starts, note_ends, time_to_note_per_column, column):
         J_collection=[]
-        for k in range (self.column_count):
+        for k in range(self.column_count):
             note_starts_fixed_column=note_starts_wrt_columns[k]
             note_ends_fixed_column=note_ends_wrt_columns[k]
             time_to_note_fixed_column=time_to_note_per_column[k]
@@ -182,7 +182,7 @@ class star_calculator():
             for i in range(len(note_starts_fixed_column) - 1):
                 append(1+2*(note_ends_fixed_column[i]-note_starts_fixed_column[i]))
             dist=[]
-            for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #same, agreememt
+            for m in range(self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001): #same, agreememt
                 i=time_to_note_fixed_column[int(m*1000)]
                 dist.append(vs[i] * (calculate_asperity[int(m*1000)]+5)/5 * intensities[int(m*1000)])
             J_single = []
@@ -207,7 +207,7 @@ class star_calculator():
     def calculate_Y(self):
         pass
 
-    def intensity_for_gt_note(self, self.note_starts):
+    def intensity_for_gt_note(self, note_starts):
         delta_t=[]
         for i in range(len(self.note_starts) - 1):
             delta_t.append(self.note_starts[i+1] - self.note_starts[i])
@@ -221,7 +221,7 @@ class star_calculator():
         intensities = list(map(intensity_func, delta_t))
         return intensities
 
-    def note_value_for_gt(self, self.note_starts, self.note_ends):
+    def note_value_for_gt(self, note_starts, note_ends):
         vs=[]
         for i in range(len(self.note_starts) - 1):
             ln_parts = []
@@ -231,7 +231,7 @@ class star_calculator():
             vs.append(1+2*sum(ln_parts))
         return vs
 
-    def intensity_for_gt_time(self, self.note_starts, intensity_for_gt_note)
+    def intensity_for_gt_time(self, note_starts, intensity_for_gt_note)
         gt=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
         #1 ms per step
@@ -244,7 +244,7 @@ class star_calculator():
             gt.append(sum(single))
         return gt
 
-    def dist_for_gt(self, self.note_starts, self.note_ends, note_value_for_gt, calculate_asperity, intensity_for_gt_time): #...What are the variables called?
+    def dist_for_gt(self, note_starts, note_ends, note_value_for_gt, calculate_asperity, intensity_for_gt_time): #...What are the variables called?
         dist=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
             i=time_to_note[int(m*1000)]
@@ -260,7 +260,7 @@ class star_calculator():
             indicators.append(0.001*sum(convolution))
         return indicators
 
-    def intensity_for_ht_note(self, self.note_ends):
+    def intensity_for_ht_note(self, note_ends):
         delta_t=[]
         for i in range(len(self.note_ends) - 1):
             delta_t.append(self.note_ends[i+1] - self.note_ends[i])
@@ -269,13 +269,13 @@ class star_calculator():
         intensities = list(map(intensity_func, delta_t))
         return intensities
 
-    def note_value_for_ht(self, self.note_starts, self.note_ends):
+    def note_value_for_ht(self, note_starts, note_ends):
         vs=[]
         for i in range(len(self.note_ends) - 1):
             append(1+2*(self.note_ends[i]-self.note_starts[i]))
         return vs
 
-    def intensity_for_ht_time(self, self.note_ends, intensity_for_ht_note)
+    def intensity_for_ht_time(self, note_ends, intensity_for_ht_note)
         ht=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
             i=time_to_note_end[int(m*1000)]
@@ -286,7 +286,7 @@ class star_calculator():
             ht.append(sum(single))
         return ht
 
-    def dist_for_ht(self, self.note_starts, self.note_ends, note_value_for_ht, calculate_asperity, intensity_for_ht_time):
+    def dist_for_ht(self, note_starts, note_ends, note_value_for_ht, calculate_asperity, intensity_for_ht_time):
         dist=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
             i=time_to_note_end[int(m*1000)]
@@ -308,7 +308,7 @@ class star_calculator():
             indicators.append(smoother_for_gt[int(i*1000)]+smoother_for_ht[int(i*1000)])
         return indicators
 
-    def weight_forY(self, self.note_starts) #preparation for taking the definite integral
+    def weight_forY(self, note_starts) #preparation for taking the definite integral
         #essentially the transformation from dt to dn.
         sequence=[]
         for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
