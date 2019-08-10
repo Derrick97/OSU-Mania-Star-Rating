@@ -212,9 +212,9 @@ class star_calculator():
         for i in range(len(self.note_starts) - 1):
             delta_t.append(self.note_starts[i+1] - self.note_starts[i])
         x = (64.5 - math.ceil(self.od * 3))/500
-        if delta_t = 0: #jumps/chords
+        if delta_t[i] = 0: #jumps/chords
             intensity_func = 1000*(0.08/x*(1-4.5*x))**(1/4) #for numerical estimation of Dirac delta function
-        if 0<delta_t & delta_t<=2*x/3:
+        if 0<delta_t[i] & delta_t[i]<=2*x/3:
             intensity_func = lambda t: t**(-1)*(0.08*x**(-1)*(1-18*x**(-1)*(t-x/2)**2))**(1/4)
         else:
             intensity_func = lambda t: t**(-1)*(0.08*x**(-1)*1-18*x*(x/6)**2))**(1/4)
