@@ -212,12 +212,13 @@ class star_calculator():
         for i in range(len(self.note_starts) - 1):
             delta_t.append(self.note_starts[i+1] - self.note_starts[i])
         x = (64.5 - math.ceil(self.od * 3))/500
-        if delta_t[i] = 0: #jumps/chords
-            intensity_func = 1000*(0.08/x*(1-4.5*x))**(1/4) #for numerical estimation of Dirac delta function
-        if 0<delta_t[i] & delta_t[i]<=2*x/3:
-            intensity_func = lambda t: t**(-1)*(0.08*x**(-1)*(1-18*x**(-1)*(t-x/2)**2))**(1/4)
-        else:
-            intensity_func = lambda t: t**(-1)*(0.08*x**(-1)*1-18*x*(x/6)**2))**(1/4)
+        for i in range(len(self.note_starts - 1)):
+            if self.note_starts[i+1] - self.note_starts[i] == 0: #jumps/chords
+                intensity_func = 1000*(0.08/x*(1-4.5*x))**(1/4) #for numerical estimation of Dirac delta function
+            if 0<self.note_starts[i+1] - self.note_starts[i] & self.note_starts[i+1] - self.note_starts[i]<=2*x/3:
+                intensity_func = lambda t: t**(-1)*(0.08*x**(-1)*(1-18*x**(-1)*(t-x/2)**2))**(1/4)
+            else:
+                intensity_func = lambda t: t**(-1)*(0.08*x**(-1)*(1-18*x*(x/6)**2))**(1/4)
         intensities = list(map(intensity_func, delta_t))
         return intensities
 
@@ -231,14 +232,14 @@ class star_calculator():
             vs.append(1+2*sum(ln_parts))
         return vs
 
-    def intensity_for_gt_time(self, note_starts, intensity_for_gt_note)
+    def intensity_for_gt_time(self, note_starts, note_ends, intensity_for_gt_note, time_to_note):
         gt=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
         #1 ms per step
         #+0.001 is necessary as the last notes may be concurrent
             i=time_to_note[int(m*1000)]
             single=[]
-            for j in range(max(i-9,0) i+1): #at most 10 concurrent notes w/o stacking
+            for j in range(max(i-9,0), i+1): #at most 10 concurrent notes w/o stacking
                 if self.note_starts_j==self.note_starts_i:
                     single.append(intensity_for_gt_note[j])
             gt.append(sum(single))
@@ -275,12 +276,12 @@ class star_calculator():
             append(1+2*(self.note_ends[i]-self.note_starts[i]))
         return vs
 
-    def intensity_for_ht_time(self, note_ends, intensity_for_ht_note)
+    def intensity_for_ht_time(self, note_starts, note_ends, time_to_note_end, intensity_for_ht_note):
         ht=[]
         for m in range (self.note_starts[0], self.note_ends[len(self.note_starts)-1]+0.001, 0.001):
             i=time_to_note_end[int(m*1000)]
             single=[]
-            for j in range(max(i-9,0) i+1):
+            for j in range(max(i-9,0), i+1):
                 if self.note_starts_j==self.note_starts_i:
                     single.append(intensity_for_ht_note[j])
             ht.append(sum(single))
@@ -308,7 +309,7 @@ class star_calculator():
             indicators.append(smoother_for_gt[int(i*1000)]+smoother_for_ht[int(i*1000)])
         return indicators
 
-    def weight_forY(self, note_starts) #preparation for taking the definite integral
+    def weight_forY(self, note_starts): #preparation for taking the definite integral
         #essentially the transformation from dt to dn.
         sequence=[]
         for i in range (self.note_starts[0]-0.499, self.note_ends[len(self.note_starts)-1]+0.501, 0.001):
