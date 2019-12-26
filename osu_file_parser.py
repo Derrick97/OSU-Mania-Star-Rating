@@ -13,7 +13,7 @@ def collect_data(data, new_datum):
 # Parser Class that can be used on other class.
 
 
-class parser():
+class parser:
     def __init__(self, file_path):
         # Need to find some way to escape \.
         # self.file_path = file_path.replace("\\", "\\\\")
@@ -48,7 +48,7 @@ class parser():
     # Read metadata from .osu file.
     def read_metadata(self, f, line):
         if "[Metadata]" in line:
-            while "[Difficulty]" not in line:
+            while "Source:" not in line:
                 print(line, end="")
                 line = f.__next__()
 
@@ -71,7 +71,7 @@ class parser():
             temp = line.strip()
             column_count = temp[-1]
             # line = f.__next__()
-            print(line)
+            print(line, end='')
         return string_to_int(column_count)
 
     def read_Timing_Points(self, f, line):
